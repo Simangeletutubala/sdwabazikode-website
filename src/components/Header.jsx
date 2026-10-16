@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
-import { Menu, X, Phone } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import companyLogo from "../assets/local/company-logo.jpg";
 
 const navigationLinks = [
@@ -76,14 +76,6 @@ export default function Header() {
             ))}
           </div>
 
-          <a
-            href="tel:+27615128410"
-            className="header-contact-button"
-            onClick={closeMenu}
-          >
-            <Phone size={16} />
-            <span>Call Us</span>
-          </a>
         </nav>
       </div>
     </header>
