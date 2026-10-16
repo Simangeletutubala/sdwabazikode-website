@@ -25,6 +25,8 @@ export default function Contact() {
   });
 
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   function handleChange(event) {
     const { name, value } = event.target;
@@ -35,27 +37,40 @@ export default function Contact() {
     }));
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
     setError("");
+    setSuccess("");
+    setIsSubmitting(true);
 
-    const subject = `Website enquiry: ${form.service}`;
-    const body = [
-      `Name: ${form.name}`,
-      `Email: ${form.email}`,
-      `Phone: ${form.phone || "Not provided"}`,
-      `Service: ${form.service}`,
-      "",
-      "Message:",
-      form.message,
-    ].join("\n");
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(form),
+      });
 
-    const mailtoLink =
-      `mailto:${COMPANY_EMAIL}` +
-      `?subject=${encodeURIComponent(subject)}` +
-      `&body=${encodeURIComponent(body)}`;
+      const payload = await response.json().catch(() => ({}));
 
-    window.location.href = mailtoLink;
+      if (!response.ok) {
+        throw new Error(payload.message || "Unable to send your enquiry right now.");
+      }
+
+      setSuccess("Your enquiry has been sent successfully.");
+      setForm({
+        name: "",
+        email: "",
+        phone: "",
+        service: "",
+        message: "",
+      });
+    } catch (submitError) {
+      setError(submitError.message || "Something went wrong while sending your enquiry.");
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   const whatsappMessage = encodeURIComponent(
@@ -245,14 +260,14 @@ export default function Contact() {
                 </div>
 
                 {error && <p className="contact-error">{error}</p>}
+                {success && <p className="contact-success">{success}</p>}
 
-                <button type="submit" className="btn btn-primary">
-                  Prepare Email Enquiry <Send size={18} />
+                <button type="submit" className="btn btn-primary" disabled={isSubmitting}>
+                  {isSubmitting ? "Sending..." : "Send Enquiry"} <Send size={18} />
                 </button>
 
                 <p className="form-disclaimer">
-                  This form opens your default email application. Your enquiry
-                  is not submitted automatically by this website.
+                  Your enquiry is sent directly via the configured SMTP mail server.
                 </p>
               </form>
             </div>
