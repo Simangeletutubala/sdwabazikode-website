@@ -17,16 +17,17 @@ If you are developing a production application, we recommend using TypeScript wi
 # sdwabazikode-website
 
 
+
 ## 📸 Website Screenshots
 
 ### Homepage
-![Sdwabazikode Homepage](screenshots/homepage.png)
+![Sdwabazikode Homepage](homepage.png)
 
 ### Services
-![Sdwabazikode Services](screenshots/services.png)
+![Sdwabazikode Services](services.png)
 
 ### Contact Form
-![Sdwabazikode Contact Form](screenshots/contact.png)
+![Sdwabazikode Contact Form](contact.png)
 
 ## 🌐 Live Website
 
