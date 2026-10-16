@@ -17,18 +17,20 @@ If you are developing a production application, we recommend using TypeScript wi
 # sdwabazikode-website
 
 
-
 ## 📸 Website Screenshots
 
 ### Homepage
-![Sdwabazikode Homepage](homepage.png)
+![Sdwabazikode Homepage](<Screenshot 2026-10-17 003643.png>)
 
 ### Services
-![Sdwabazikode Services](services.png)
+![Sdwabazikode Services](<Screenshot 2026-10-17 003730.png>)
 
 ### Contact Form
-![Sdwabazikode Contact Form](contact.png)
+![Sdwabazikode Contact Form](<Screenshot 2026-10-17 003813.png>)
 
 ## 🌐 Live Website
+
+Visit the [Sdwabazikode Transportation & Security Solutions website](https://sdwabazikode-transport-security.netlify.app/).
+
 
 [Visit Sdwabazikode Transportation & Security Solutions](https://sdwabazikode-transport-security.netlify.app/)
