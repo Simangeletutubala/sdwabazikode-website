@@ -65,23 +65,25 @@ export default function Home() {
   return (
     <main>
       {/* Hero section */}
-      <section className="hero" style={{ backgroundImage: `url(${heroImage})` }}>
+      <section
+        className="hero"
+        style={{ backgroundImage: `url(${heroImage})` }}
+      >
         <div className="hero-overlay" />
 
         <div className="container hero-content">
           <span className="eyebrow eyebrow-light">
-            TRANSPORTATION • SECURITY • SERVICE EXCELLENCE
+            TRANSPORTATION • SECURITY
           </span>
 
           <h1>
-            Moving People.
+            SERVICE EXCELLENCE
             <br />
-            <span>Protecting What Matters.</span>
+            <span>Moving People. Protecting What Matters.</span>
           </h1>
 
           <p className="hero-description">
-            Professional transportation and security solutions
-            built around reliability, accountability and your needs.
+            Realiable transport and security services across South Africa.
           </p>
 
           <div className="hero-actions">
@@ -128,9 +130,9 @@ export default function Home() {
             <span className="eyebrow">WHAT WE DO</span>
             <h2>Solutions for Your Transport & Security Needs</h2>
             <p>
-              We provide transportation and security services intended
-              to respond to client requirements with professionalism,
-              efficiency and accountability.
+              We provide transportation and security services intended to
+              respond to client requirements with professionalism, efficiency
+              and accountability.
             </p>
           </div>
 
@@ -188,16 +190,16 @@ export default function Home() {
             <h2>A Commitment to Reliable Service</h2>
 
             <p>
-              Established in 2017, Sdwabazikode Transportation &
-              Security Solutions is a South African company providing
-              transportation and security services.
+              Established in 2017, Sdwabazikode Transportation & Security
+              Solutions is a South African company providing transportation and
+              security services.
             </p>
 
             <p>
-              Our approach is guided by client needs, service quality,
-              ethical conduct and a commitment to continuous improvement.
-              We aim to build lasting relationships through dependable
-              and accountable service delivery.
+              Our approach is guided by client needs, service quality, ethical
+              conduct and a commitment to continuous improvement. We aim to
+              build lasting relationships through dependable and accountable
+              service delivery.
             </p>
 
             <ul className="check-list">
@@ -237,10 +239,10 @@ export default function Home() {
               </div>
               <h3>Our Mission</h3>
               <p>
-                To provide professional transportation and security
-                services that respond to client and community needs,
-                while supporting sustainable employment, youth
-                development, efficiency, accountability and integrity.
+                To provide professional transportation and security services
+                that respond to client and community needs, while supporting
+                sustainable employment, youth development, efficiency,
+                accountability and integrity.
               </p>
             </article>
 
@@ -250,10 +252,9 @@ export default function Home() {
               </div>
               <h3>Our Vision</h3>
               <p>
-                To be a reputable and trusted transportation and
-                security provider, recognised for service excellence,
-                reliability, client satisfaction, continuous improvement
-                and timely delivery.
+                To be a reputable and trusted transportation and security
+                provider, recognised for service excellence, reliability, client
+                satisfaction, continuous improvement and timely delivery.
               </p>
             </article>
           </div>
@@ -267,8 +268,8 @@ export default function Home() {
             <span className="eyebrow">WHAT GUIDES US</span>
             <h2>Our Core Values</h2>
             <p>
-              Our values shape how we approach our work, engage with
-              clients and pursue dependable service delivery.
+              Our values shape how we approach our work, engage with clients and
+              pursue dependable service delivery.
             </p>
           </div>
 
@@ -292,8 +293,8 @@ export default function Home() {
             </span>
             <h2>Looking for a Transportation or Security Partner?</h2>
             <p>
-              Contact our team to discuss your requirements,
-              procurement enquiries or potential business opportunities.
+              Contact our team to discuss your requirements, procurement
+              enquiries or potential business opportunities.
             </p>
           </div>
 
