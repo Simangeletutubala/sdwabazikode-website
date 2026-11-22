@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import {
   MapPin,
@@ -55,7 +54,9 @@ export default function Contact() {
       const payload = await response.json().catch(() => ({}));
 
       if (!response.ok) {
-        throw new Error(payload.message || "Unable to send your enquiry right now.");
+        throw new Error(
+          payload.message || "Unable to send your enquiry right now.",
+        );
       }
 
       setSuccess("Your enquiry has been sent successfully.");
@@ -67,14 +68,17 @@ export default function Contact() {
         message: "",
       });
     } catch (submitError) {
-      setError(submitError.message || "Something went wrong while sending your enquiry.");
+      setError(
+        submitError.message ||
+          "Something went wrong while sending your enquiry.",
+      );
     } finally {
       setIsSubmitting(false);
     }
   }
 
   const whatsappMessage = encodeURIComponent(
-    "Hello Sdwabazikode Transportation & Security Solutions. I would like to enquire about your services."
+    "Hello Sdwabazikode Transportation & Security Solutions. I would like to enquire about your services.",
   );
 
   return (
@@ -120,10 +124,7 @@ export default function Contact() {
                 </span>
               </a>
 
-              <a
-                className="contact-detail"
-                href={`mailto:${COMPANY_EMAIL}`}
-              >
+              <a className="contact-detail" href={`mailto:${COMPANY_EMAIL}`}>
                 <span className="contact-detail-icon">
                   <Mail size={22} />
                 </span>
@@ -157,9 +158,11 @@ export default function Contact() {
 
               <a
                 className="contact-whatsapp"
-                href={`https://wa.me/${WHATSAPP_NUMBER}?text=${whatsappMessage}`}
+                href={`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
+                  "Hello Sdwabazikode Transportation & Security Solutions. I would like to enquire about your services.",
+                )}`}
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
               >
                 <MessageCircle size={20} />
                 Contact us on WhatsApp
@@ -262,12 +265,18 @@ export default function Contact() {
                 {error && <p className="contact-error">{error}</p>}
                 {success && <p className="contact-success">{success}</p>}
 
-                <button type="submit" className="btn btn-primary" disabled={isSubmitting}>
-                  {isSubmitting ? "Sending..." : "Send Enquiry"} <Send size={18} />
+                <button
+                  type="submit"
+                  className="btn btn-primary"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? "Sending..." : "Send Enquiry"}{" "}
+                  <Send size={18} />
                 </button>
 
                 <p className="form-disclaimer">
-                  Your enquiry is sent directly via the configured SMTP mail server.
+                  Your enquiry is sent directly via the configured SMTP mail
+                  server.
                 </p>
               </form>
             </div>
@@ -281,8 +290,8 @@ export default function Contact() {
           <div>
             <h2>Need help choosing a service?</h2>
             <p>
-              Visit our service pages to learn more, then contact us with
-              your requirements.
+              Visit our service pages to learn more, then contact us with your
+              requirements.
             </p>
           </div>
           <div className="contact-bottom-links">

@@ -4,8 +4,9 @@ import nodemailer from 'nodemailer';
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { adminDb } from "./firebaseAdmin.js";
 
-dotenv.config();
+dotenv.config({ path: ".env.local" });
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -24,63 +25,106 @@ const smtpConfig = {
 app.use(cors());
 app.use(express.json({ limit: '1mb' }));
 
+
 app.post('/api/contact', async (req, res) => {
   const { name, email, phone, service, message } = req.body || {};
 
-  if (!name || !email || !service || !message) {
+  // Validate required fields
+  if (
+    !name?.trim() ||
+    !email?.trim() ||
+    !service?.trim() ||
+    !message?.trim()
+  ) {
     return res.status(400).json({
       message: 'Please complete all required fields before sending your enquiry.',
     });
   }
 
-  if (!smtpConfig.host || !smtpConfig.user || !smtpConfig.pass || !smtpConfig.from) {
-    return res.status(500).json({
-      message: 'SMTP is not configured yet. Add SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, and SMTP_FROM values to your environment before sending.',
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  if (!emailPattern.test(email.trim())) {
+    return res.status(400).json({
+      message: 'Please enter a valid email address.',
     });
   }
 
-  if (!smtpConfig.user.includes('@') || !smtpConfig.from.includes('@')) {
+  if (!process.env.SMTP_HOST ||
+      !process.env.SMTP_USER ||
+      !process.env.SMTP_PASS ||
+      !process.env.SMTP_FROM) {
     return res.status(500).json({
-      message: 'SMTP_USER and SMTP_FROM must be valid Gmail email addresses. For Gmail, also use a 16-character app password in SMTP_PASS.',
+      message: 'Email service is not configured.',
     });
   }
 
   const transporter = nodemailer.createTransport({
-    host: smtpConfig.host,
-    port: smtpConfig.port,
-    secure: smtpConfig.secure,
+    host: process.env.SMTP_HOST,
+    port: Number(process.env.SMTP_PORT || 587),
+    secure: String(process.env.SMTP_SECURE || 'false') === 'true',
     auth: {
-      user: smtpConfig.user,
-      pass: smtpConfig.pass,
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASS,
     },
   });
 
-  const formattedMessage = [
-    `Name: ${name}`,
-    `Email: ${email}`,
-    `Phone: ${phone || 'Not provided'}`,
-    `Service: ${service}`,
-    '',
-    'Message:',
-    message,
-  ].join('\n');
-
   try {
+    // Save enquiry to Firestore first
+    const enquiry = {
+      name: name.trim(),
+      email: email.trim(),
+      phone: phone?.trim() || '',
+      service: service.trim(),
+      message: message.trim(),
+      status: 'New',
+      createdAt: new Date(),
+      source: 'Website',
+    };
+
+    const docRef = await adminDb.collection('enquiries').add(enquiry);
+
+    // Send email notification
+    const formattedMessage = [
+      `Name: ${enquiry.name}`,
+      `Email: ${enquiry.email}`,
+      `Phone: ${enquiry.phone || 'Not provided'}`,
+      `Service: ${enquiry.service}`,
+      '',
+      'Message:',
+      enquiry.message,
+      '',
+      `Firestore enquiry ID: ${docRef.id}`,
+    ].join('\n');
+
+    const escapeHtml = (value) =>
+      value.replace(/[&<>"']/g, (character) => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;',
+      })[character]);
+
     await transporter.sendMail({
-      from: smtpConfig.from,
-      to: process.env.SMTP_TO || smtpConfig.user,
-      replyTo: email,
-      subject: `Website enquiry: ${service}`,
+      from: process.env.SMTP_FROM,
+      to: process.env.SMTP_TO || process.env.SMTP_USER,
+      replyTo: enquiry.email,
+      subject: `Website enquiry: ${enquiry.service}`,
       text: formattedMessage,
-      html: `<pre style="font-family: Arial, sans-serif; white-space: pre-wrap;">${formattedMessage.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</pre>`,
+      html: `<pre style="font-family: Arial, sans-serif; white-space: pre-wrap;">${escapeHtml(formattedMessage)}</pre>`,
     });
 
-    return res.status(200).json({ success: true, message: 'Enquiry sent successfully.' });
+    return res.status(200).json({
+      success: true,
+      message: 'Enquiry sent successfully.',
+      enquiryId: docRef.id,
+    });
+
   } catch (error) {
-    console.error('SMTP send failed:', error);
+    console.error('Enquiry processing failed:', error);
 
     return res.status(500).json({
-      message: 'The SMTP mail server rejected the enquiry. For Gmail, confirm SMTP_USER and SMTP_FROM are valid email addresses and SMTP_PASS is a real 16-character Google App Password.',
+      message: 'Your enquiry could not be fully processed. Please contact us directly if the problem continues.',
     });
   }
 });

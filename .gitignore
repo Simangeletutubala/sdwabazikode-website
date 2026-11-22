@@ -4,3 +4,10 @@ dist/
 .env
 .env.*
 !.env.example
+
+# Local Netlify folder
+.netlify
+
+# Firebase private credentials
+*service-account*.json
+*firebase-admin*.json
